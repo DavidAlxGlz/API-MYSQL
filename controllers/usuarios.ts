@@ -1,8 +1,17 @@
 import { Request, Response } from "express";
+import  jwt  from "jsonwebtoken";
+import  config  from "../config/config";
 
 import Usuario from "../models/usuarios";
 
+function createToken(usuario:any){
+    return jwt.sign({id:usuario.idusuarios},config.jwtSecret,{
+        expiresIn: 8000
+    })
+}
+
 export const singin = async (req:Request, res:Response):Promise<Response> => {
+    console.log('si entra')
     if(!req.body.account || !req.body.password){
         return res.status(401).json({msg:'Envie la informacion'})
     }
@@ -18,7 +27,7 @@ export const singin = async (req:Request, res:Response):Promise<Response> => {
                 return res.status(400).json({ msg: 'Error de contraseña' });
             } else {
                 //TODO success
-                return res.status(200).json({ msg:'success', usuario:user.name})
+                return res.status(200).json({ token: createToken(user) })
             }
         });
 
@@ -50,13 +59,12 @@ export const postUsuarios = async (req:Request, res:Response):Promise<Response> 
     }
 
     const usuario = new (Usuario as any)(body);
-    console.log(usuario)
     await usuario.save();
-
 
     return res.status(200).json({ usuario:usuario });
 
    } catch (error) {
+       console.log(error)
        return res.status(500).json({
            msg:'Error en al crear usuario'
        });

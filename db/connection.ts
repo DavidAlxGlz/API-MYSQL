@@ -1,6 +1,6 @@
 import { Sequelize } from "sequelize";
 
-const db = new Sequelize('apimysql', 'root','2602754',{
+const db = new Sequelize('api-mysql', 'root','$noobmaster123',{
     host:'localhost',
     dialect:'mysql'
 });

@@ -2,11 +2,10 @@ import { DataTypes } from "sequelize";
 import db from "../db/connection";
 import bcrypt from "bcrypt";
 
-const Usuario = db.define('Usuario',{
+const Usuario = db.define('usuarios',{
     idusuarios: {
         type: DataTypes.INTEGER,
         primaryKey:true,
-        defaultValue: true
     },
     account: {
         type: DataTypes.STRING
@@ -23,7 +22,7 @@ const Usuario = db.define('Usuario',{
 });
 
 Usuario.beforeCreate( async function(user:any) {
-    const salt = await bcrypt.genSalt(10); //whatever number you want
+    const salt = await bcrypt.genSalt(10); //saltos para encriptar
     user.password = await bcrypt.hash(user.password, salt);
 })
 
